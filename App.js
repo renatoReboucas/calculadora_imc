@@ -1,6 +1,7 @@
 import React,{ useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, AsyncStorage, FlatList } from 'react-native';
 import Constants from 'expo-constants';
+import Moment from 'moment'
 
 
 // or any pure javascript modules available in npm
@@ -12,8 +13,20 @@ export default function App() {
   const [altura, setAltura] = useState(0)
   const [peso, setPeso] = useState(0)
   const [cor, setCor] = useState("#bdc3c7")
+  const [dbImc, setDbImc] = useState([])
 
-  const calcularIMC = () =>{
+  useEffect(() => {
+    const data = AsyncStorage.getItem("imc").then(data => {
+        if (data) {
+          const getImc = JSON.parse(data);
+          setDbImc(getImc);
+        } 
+      // console.warn(`read dbImc: ${dbImc.id}`);
+        
+      })
+  }, []);
+
+  const calcularIMC = async () =>{
     // const peso = 106
     // const altura = 1.86
    
@@ -22,6 +35,7 @@ export default function App() {
     }else{
       const calc = peso / (altura * altura)
       setImc(Math.ceil(calc))
+      await saveImac()
       if(calc < 18.5){
         setLegenda("Magreza")
         setCor("#e74c3c")
@@ -41,6 +55,26 @@ export default function App() {
     }
   }
 
+  const saveImac = async () => {
+    const obj = []
+    const date = Moment().locale('pt-br').format('DD/MM/YYYY').toString()
+    const id = Math.random(5000).toString()
+    const data = {
+      id,
+      peso,
+      altura,
+      imc,
+      date
+    }
+    obj.push(data)
+    // console.warn(`set data obj: ${JSON.stringify(data)} `);
+    
+    await AsyncStorage.setItem('imc', JSON.stringify(obj))
+    
+  }
+
+ 
+
   return (
     <View style={styles.app}>
       <Text style={styles.legenda}>Seu IMC</Text>
@@ -49,7 +83,7 @@ export default function App() {
         <Text style={styles.resultado}>{imc}</Text>
         <Text style={styles.diagnostico}>{legenda}</Text>
       </View>
-
+ 
       <View>
         <TextInput label="peso"  style={styles.peso} onChangeText={valor => { setPeso(valor.replace(',', '.')) }} 
           />
@@ -57,6 +91,18 @@ export default function App() {
         <Button mode="contained" onPress={calcularIMC}>
           Calcular
         </Button>
+      </View>
+ 
+      <View>
+        {/* <FlatList
+        data={dbImc}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <Text>{item.date}</Text>
+
+        )}
+        /> */}
+        <Text>{dbImc.imc}</Text>
       </View>
 
     </View>
