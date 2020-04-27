@@ -6,6 +6,7 @@ import Moment from 'moment'
 
 // or any pure javascript modules available in npm
 import { Button,TextInput } from 'react-native-paper';
+import {List} from './styles'
 
 export default function App() {
   const [imc, setImc] = useState(0);
@@ -84,7 +85,7 @@ export default function App() {
         <Text style={styles.diagnostico}>{legenda}</Text>
       </View>
  
-      <View>
+      <View style={{marginBottom:80}}>
         <TextInput label="peso"  style={styles.peso} onChangeText={valor => { setPeso(valor.replace(',', '.')) }} 
           />
         <TextInput label="altura"  style={styles.altura} onChangeText={valor => { setAltura(valor.replace(',', '.')) }}              />
@@ -93,16 +94,22 @@ export default function App() {
         </Button>
       </View>
  
-      <View>
-        {/* <FlatList
+      <View style={styles.list}>
+        <Text style={styles.txtHistory}>Histórico de Consultas</Text>
+        <FlatList
         data={dbImc}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <Text>{item.date}</Text>
+          <View >
+            <Text style={styles.txtResult}>IMC: {item.imc}</Text>
+            <Text style={styles.txtResult}>Peso: {item.peso}</Text>
+            <Text style={styles.txtResult}>Altura: {item.altura}</Text>
+            <Text style={styles.txtResult}>Data: {item.date}</Text>
+          </View>
 
         )}
-        /> */}
-        <Text>{dbImc.imc}</Text>
+        />
+        {/* <Text>{dbImc.imc}</Text> */}
       </View>
 
     </View>
@@ -149,6 +156,29 @@ const styles = StyleSheet.create({
     width: 150,
     margin: 10,
     padding: 8
+  },
+  list:{
+    marginTop: 10,
+    borderColor: '#000',
+    borderWidth: 1,
+    overflow: 'hidden',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowRadius: 10,
+    shadowOpacity: 1,
+    elevation: 10
+
+  },
+  txtHistory:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    margin: 10,
+    padding: 10,
+    textAlign: 'center'
+  },
+  txtResult:{
+    margin: 5,
+    padding: 5,
+    fontSize: 15,
   },
 
 });

@@ -2,8 +2,8 @@
   "expo": {
     "name": "calculadora_imc",
     "description": "No description",
-    "slug": "snack-6aa59dc9-9386-46a5-ade8-613c5d1c369e",
-    "privacy": "unlisted",
+    "slug": "calculadora_imc",
+    "privacy": "public",
     "sdkVersion": "37.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,6 +23,9 @@
     },
     "ios": {
       "supportsTablet": true
+    },
+    "android" :{
+      "package": "com.teste.calculadora_imc"
     }
   }
 }
